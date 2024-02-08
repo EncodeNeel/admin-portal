@@ -1,0 +1,102 @@
+html,
+body,
+#root {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.langingPage-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 50px;
+  height: 100%;
+  transition: all 2s;
+  border: none;
+  background-color: transparent;
+}
+
+nav {
+  background-color: #eee;
+  transition: all 2s;
+  margin-left: 0;
+}
+
+ul {
+  list-style: none;
+  color: black;
+  padding: 2px 2px 2px 2px;
+}
+.show {
+  width: 40vw;
+  margin-left: 0;
+  height: 100%;
+}
+
+.hide {
+  width: 0;
+  margin-left: -40vw;
+  height: 100%;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+}
+
+/* Add this to your CSS */
+.list-items-container {
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: calc(
+    100vh - 120px
+  ); /* Set a maximum height to trigger scrolling */
+}
+
+.list-item {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #fff;
+  color: black;
+  cursor: pointer;
+}
+
+.container-menus {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.menu-item {
+  padding: 10px;
+  width: 150px;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #1ebb5f75;
+  color: black;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 40vw;
+  background-color: #f4f4f4;
+  margin: 20px 20px 20px 20px;
+}

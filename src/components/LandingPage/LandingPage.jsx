@@ -1,18 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./LandingPage.css";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { getAllPrescriptions } from "../../apis/Interceptor";
 
 export default function LandingPage() {
-  const [isNavVisible, setNavVisibility] = useState(false);
+  const [isNavVisible, setNavVisibility] = useState(true);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
+
+  useEffect(() => {
+    // Call the function to get all prescriptions
+    fetchAllPrescriptions();
+  }, []);
+
+  const fetchAllPrescriptions = async () => {
+    try {
+      const response = await getAllPrescriptions();
+      setPrescriptions(response.prescriptions || []);
+    } catch (error) {
+      console.error("Error fetching prescriptions:", error.message);
+    }
+  };
 
   const toggleNav = () => {
     setNavVisibility(!isNavVisible);
   };
 
-  const items = ["One", "Two", "Three", "Four", "Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen","Twenty"];
+  const handlePrescriptionClick = (prescription) => {
+    setSelectedPrescription(prescription);
+  };
+
   return (
     <div className="list-container">
-      <div className="langingPage-container ">
+      <div className="langingPage-container">
         <nav id="navbar" className={isNavVisible ? "show" : "hide"}>
           <div className="container-menus">
             <div className="menu-item">Recent Orders</div>
@@ -20,9 +40,16 @@ export default function LandingPage() {
             <div className="menu-item">Completed Order</div>
           </div>
           <ul className="list-items-container">
-            {items.map((item, index) => (
-              <div key={index} className="list-item">
-                {item}
+            {prescriptions.map((prescription, index) => (
+              <div
+                key={index}
+                className={`list-item ${
+                  prescription === selectedPrescription ? "selected" : ""
+                }`}
+                onClick={() => handlePrescriptionClick(prescription)}
+              >
+                <p>{prescription.name}</p>
+                {/* Display the image */}
               </div>
             ))}
           </ul>
@@ -37,16 +64,22 @@ export default function LandingPage() {
           )}
         </button>
       </div>
-      <div>
-        <div className="content">
-          <h1>Content</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos
-            provident, quibusdam, doloribus, quas voluptates quae quia
-            exercitationem quidem quod tempore aperiam. Quod, voluptatum
-            exercitationem. Quos, voluptates. Quod, voluptatum exercitationem.
-          </p>
-        </div>
+      <div className="content">
+        {selectedPrescription && (
+          <>
+            {/* <p>Name: {selectedPrescription.name}</p>
+            <p>Age: {selectedPrescription.age}</p> */}
+
+            {/* Add more details as needed */}
+          </>
+        )}
+        {selectedPrescription && selectedPrescription.image && (
+          <img
+            className="prescription-image"
+            src={`data:image/jpeg;base64,${selectedPrescription.image}`}
+            alt="prescription"
+          />
+        )}
       </div>
     </div>
   );

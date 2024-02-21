@@ -1,0 +1,19 @@
+.form-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.patient-info , .medicine-info {
+  display: flex;
+  flex-direction: column;
+  gap:8vh;
+}
+
+.medicine-form-open {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}

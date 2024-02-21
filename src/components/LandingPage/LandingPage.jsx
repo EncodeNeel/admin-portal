@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import "./LandingPage.css";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { getAllPrescriptions } from "../../apis/Interceptor";
+import MedicineForm from "../Form/MedicineForm";
 
 export default function LandingPage() {
   const [isNavVisible, setNavVisibility] = useState(true);
   const [prescriptions, setPrescriptions] = useState([]);
   const [selectedPrescription, setSelectedPrescription] = useState(null);
+  const [isMedicineFormOpen, setMedicineFormOpen] = useState(false);
 
   useEffect(() => {
     // Call the function to get all prescriptions
@@ -28,6 +30,11 @@ export default function LandingPage() {
 
   const handlePrescriptionClick = (prescription) => {
     setSelectedPrescription(prescription);
+    setMedicineFormOpen(true);
+  };
+
+  const closeMedicineForm = () => {
+    setMedicineFormOpen(false);
   };
 
   return (
@@ -49,7 +56,6 @@ export default function LandingPage() {
                 onClick={() => handlePrescriptionClick(prescription)}
               >
                 <p>{prescription.name}</p>
-                {/* Display the image */}
               </div>
             ))}
           </ul>
@@ -64,23 +70,12 @@ export default function LandingPage() {
           )}
         </button>
       </div>
-      <div className="content">
-        {selectedPrescription && (
-          <>
-            {/* <p>Name: {selectedPrescription.name}</p>
-            <p>Age: {selectedPrescription.age}</p> */}
 
-            {/* Add more details as needed */}
-          </>
-        )}
-        {selectedPrescription && selectedPrescription.image && (
-          <img
-            className="prescription-image"
-            src={`data:image/jpeg;base64,${selectedPrescription.image}`}
-            alt="prescription"
-          />
-        )}
-      </div>
+      <MedicineForm
+        isOpen={isMedicineFormOpen}
+        onClose={closeMedicineForm}
+        selectedPrescription={selectedPrescription}
+      />
     </div>
   );
 }

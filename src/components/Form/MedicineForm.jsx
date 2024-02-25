@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAllMedicines } from "../../apis/Interceptor";
+
+import Chip from "@mui/material/Chip";
 import "./MedicineForm.css";
 
 export default function MedicineForm({
@@ -21,17 +23,20 @@ export default function MedicineForm({
       frequency: "",
     },
     suggestedMedicines: [],
+    selectedMedicines: [],
   });
 
   useEffect(() => {
     if (selectedPrescription) {
       setPatientDetails({
-        name: selectedPrescription.name || "",
-        age: selectedPrescription.age || "",
-        address: selectedPrescription.address || "",
-        contact: selectedPrescription.contact || "",
-        date: selectedPrescription.date || "",
-        description: selectedPrescription.description || "",
+        name: selectedPrescription.prescription_details.name || "",
+        age: selectedPrescription.prescription_details.age || "",
+        address: selectedPrescription.prescription_details.address || "",
+        contact:
+          selectedPrescription.prescription_details.contact_details || "",
+        date: selectedPrescription.prescription_details.date || "",
+        description:
+          selectedPrescription.prescription_details.description || "",
         medicineDetails: {
           name: "",
         },
@@ -92,6 +97,35 @@ export default function MedicineForm({
       },
     }));
     // Additional logic if needed
+  };
+
+  const handleDeleteMedicine = (index) => {
+    setPatientDetails((prevDetails) => {
+      const newSelectedMedicines = [...prevDetails.selectedMedicines];
+      newSelectedMedicines.splice(index, 1);
+      return {
+        ...prevDetails,
+        selectedMedicines: newSelectedMedicines,
+      };
+    });
+  };
+
+  const handleAddMedicine = () => {
+    const { name, dosage, frequency } = patientDetails.medicineDetails;
+    if (name.trim() !== "") {
+      setPatientDetails((prevDetails) => ({
+        ...prevDetails,
+        selectedMedicines: [
+          ...prevDetails.selectedMedicines,
+          { name, dosage, frequency },
+        ],
+        medicineDetails: {
+          name: "",
+          dosage: "",
+          frequency: "",
+        },
+      }));
+    }
   };
 
   return (
@@ -182,6 +216,28 @@ export default function MedicineForm({
                       </select>
                     </div>
                   )}
+                  <button type="button" onClick={handleAddMedicine}>
+                    Add Medicine
+                  </button>
+                  {patientDetails.selectedMedicines.length > 0 && (
+                    <div className="added-medicines">
+                      {/* Display the selected medicines as Chips */}
+                      {patientDetails.selectedMedicines.length > 0 && (
+                        <div className="added-medicines">
+                          {/* Display the selected medicines as Chips */}
+                          {patientDetails.selectedMedicines.map(
+                            (medicine, index) => (
+                              <Chip
+                                key={index}
+                                label={medicine.name}
+                                onDelete={() => handleDeleteMedicine(index)}
+                              />
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </label>
                 <label>
                   Dosage:
@@ -214,7 +270,7 @@ export default function MedicineForm({
       </div>
       {selectedPrescription && (
         <img
-          src={`data:image/png;base64,${selectedPrescription.image}`}
+          src={`data:image/png;base64,${selectedPrescription.prescription_details.image}`}
           alt="prescription"
           className="prescription-image"
         />

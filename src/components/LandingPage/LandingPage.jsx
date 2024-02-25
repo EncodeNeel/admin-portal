@@ -17,7 +17,7 @@ export default function LandingPage() {
   const fetchAllPrescriptions = async () => {
     try {
       const response = await getAllOrdersByPharmacyName();
-      setPrescriptions(response.prescriptions || []);
+      setPrescriptions(response.orders || []);
     } catch (error) {
       console.error("Error fetching prescriptions:", error.message);
     }
@@ -35,6 +35,8 @@ export default function LandingPage() {
   const closeMedicineForm = () => {
     setMedicineFormOpen(false);
   };
+
+  console.log(prescriptions);
 
   return (
     <div className="list-container">
@@ -54,7 +56,7 @@ export default function LandingPage() {
                 }`}
                 onClick={() => handlePrescriptionClick(prescription)}
               >
-                <p>{prescription.name}</p>
+                <p>{prescription.prescription_details.name}</p>
               </div>
             ))}
           </ul>

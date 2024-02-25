@@ -1,0 +1,8 @@
+.bg-light{
+    background-color: #6489d7 !important;
+    height: 5vh;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+}

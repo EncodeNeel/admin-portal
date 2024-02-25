@@ -34,9 +34,30 @@ export default function MedicineForm({ isOpen, onClose, selectedPrescription }) 
           selectedPrescription.prescription_details.description || "",
         medicineDetails: {
           name: "",
+          dosage: "",
+          frequency: "",
         },
         suggestedMedicines: [],
+        selectedMedicines: [],
       });
+
+      // Wrap the API call in a try-catch block for error handling
+      const fetchData = async () => {
+        try {
+          const data = await getAllMedicines(
+            selectedPrescription.prescription_details.name.trim()
+          );
+          console.log("API response:", data.significantLink);
+          setPatientDetails((prevDetails) => ({
+            ...prevDetails,
+            suggestedMedicines: data.significantLink || [],
+          }));
+        } catch (error) {
+          console.error("Error fetching suggested medicines:", error.message);
+        }
+      };
+
+      fetchData();
     }
   }, [selectedPrescription]);
 
@@ -62,7 +83,7 @@ export default function MedicineForm({ isOpen, onClose, selectedPrescription }) 
       console.log("Calling getAllMedicines with value:", value.trim());
       getAllMedicines(value.trim())
         .then((data) => {
-          console.log("API response:", data.significantLink); // Log the API response
+          console.log("API response:", data.significantLink);
           setPatientDetails((prevDetails) => ({
             ...prevDetails,
             suggestedMedicines: data.significantLink || [],
@@ -77,10 +98,12 @@ export default function MedicineForm({ isOpen, onClose, selectedPrescription }) 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", patientDetails);
-    onClose(); // Close the form after submission
+    onClose();
   };
 
-  const handleConfirmOrder = () => {};
+  const handleConfirmOrder = () => {
+    // Handle confirmation logic
+  };
 
   const handleSelectedMedicineChange = (e) => {
     const selectedMedicineName = e.target.value;
@@ -91,7 +114,6 @@ export default function MedicineForm({ isOpen, onClose, selectedPrescription }) 
         name: selectedMedicineName,
       },
     }));
-    // Additional logic if needed
   };
 
   const handleDeleteMedicine = (index) => {
@@ -124,9 +146,9 @@ export default function MedicineForm({ isOpen, onClose, selectedPrescription }) 
   };
 
   return (
-    <div className={`medicine-form ${isOpen ? "open" : ""}`}>
+    <div className={`medicine-form-${isOpen ? "open" : ""}`}>
       <div className="form-content">
-        {12 && (
+        {selectedPrescription && (
           <>
             <form onSubmit={handleSubmit} className="form-inputs">
               <div className="patient-info">

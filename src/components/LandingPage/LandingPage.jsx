@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./LandingPage.css";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { getAllPrescriptions } from "../../apis/Interceptor";
+import { getAllOrdersByPharmacyName } from "../../apis/Interceptor";
 import MedicineForm from "../Form/MedicineForm";
 
 export default function LandingPage() {
@@ -11,13 +11,12 @@ export default function LandingPage() {
   const [isMedicineFormOpen, setMedicineFormOpen] = useState(false);
 
   useEffect(() => {
-    // Call the function to get all prescriptions
     fetchAllPrescriptions();
   }, []);
 
   const fetchAllPrescriptions = async () => {
     try {
-      const response = await getAllPrescriptions();
+      const response = await getAllOrdersByPharmacyName();
       setPrescriptions(response.prescriptions || []);
     } catch (error) {
       console.error("Error fetching prescriptions:", error.message);

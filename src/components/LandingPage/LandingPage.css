@@ -51,12 +51,11 @@ ul {
   align-items: center;
 }
 
-/* Add this to your CSS */
 .list-items-container {
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto; 
   max-height: calc(
     100vh - 120px
-  ); /* Set a maximum height to trigger scrolling */
+  );
 }
 
 .list-item {

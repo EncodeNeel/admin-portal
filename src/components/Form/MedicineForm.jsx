@@ -1,11 +1,13 @@
-import { useState ,useEffect} from "react";
-import "./MedicineForm.css"; // Add your CSS file for styling
+import { useState, useEffect } from "react";
+import { getAllMedicines } from "../../apis/Interceptor";
+import "./MedicineForm.css";
 
 export default function MedicineForm({
   isOpen,
   onClose,
   selectedPrescription,
 }) {
+  console.log(selectedPrescription);
   const [patientDetails, setPatientDetails] = useState({
     name: "",
     age: "",
@@ -18,11 +20,11 @@ export default function MedicineForm({
       dosage: "",
       frequency: "",
     },
+    suggestedMedicines: [],
   });
 
   useEffect(() => {
     if (selectedPrescription) {
-      // Use the patient information from selectedPrescription to populate the form
       setPatientDetails({
         name: selectedPrescription.name || "",
         age: selectedPrescription.age || "",
@@ -32,9 +34,8 @@ export default function MedicineForm({
         description: selectedPrescription.description || "",
         medicineDetails: {
           name: "",
-          dosage: "",
-          frequency: "",
         },
+        suggestedMedicines: [],
       });
     }
   }, [selectedPrescription]);
@@ -56,19 +57,47 @@ export default function MedicineForm({
         [name]: value,
       },
     }));
+
+    if (name === "name" && value.trim() !== "") {
+      console.log("Calling getAllMedicines with value:", value.trim());
+      getAllMedicines(value.trim())
+        .then((data) => {
+          console.log("API response:", data.significantLink); // Log the API response
+          setPatientDetails((prevDetails) => ({
+            ...prevDetails,
+            suggestedMedicines: data.significantLink || [],
+          }));
+        })
+        .catch((error) => {
+          console.error("Error fetching suggested medicines:", error.message);
+        });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform actions with patientDetails, e.g., make an API call to update details
     console.log("Form submitted:", patientDetails);
     onClose(); // Close the form after submission
+  };
+
+  const handleConfirmOrder = () => {};
+
+  const handleSelectedMedicineChange = (e) => {
+    const selectedMedicineName = e.target.value;
+    setPatientDetails((prevDetails) => ({
+      ...prevDetails,
+      medicineDetails: {
+        ...prevDetails.medicineDetails,
+        name: selectedMedicineName,
+      },
+    }));
+    // Additional logic if needed
   };
 
   return (
     <div className={`medicine-form-${isOpen ? "open" : ""}`}>
       <div className="form-content">
-        {selectedPrescription && (
+        {12 && (
           <>
             <form onSubmit={handleSubmit} className="form-inputs">
               <div className="patient-info">
@@ -135,6 +164,24 @@ export default function MedicineForm({
                     value={patientDetails.medicineDetails.name}
                     onChange={handleMedicineChange}
                   />
+                  {patientDetails.suggestedMedicines.length > 0 && (
+                    <div className="suggested-meds-container">
+                      <label htmlFor="selectedMedicine">Select Medicine:</label>
+                      <select
+                        id="selectedMedicine"
+                        name="selectedMedicine"
+                        value={patientDetails.medicineDetails.name} // Set the value to the selected medicine
+                        onChange={(e) => handleSelectedMedicineChange(e)}
+                      >
+                        <option value="">Select a medicine</option>
+                        {patientDetails.suggestedMedicines.map((medicine) => (
+                          <option key={medicine.id} value={medicine.name}>
+                            {medicine.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </label>
                 <label>
                   Dosage:
@@ -155,7 +202,12 @@ export default function MedicineForm({
                   />
                 </label>
               </div>
-              <button type="submit">Submit</button>
+              <div className="order-btns">
+                <button type="submit" onClick={() => handleConfirmOrder()}>
+                  Confirm Order
+                </button>
+                <button type="reject">Reject Order</button>
+              </div>
             </form>
           </>
         )}

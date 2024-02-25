@@ -8,7 +8,7 @@
 .patient-info , .medicine-info {
   display: flex;
   flex-direction: column;
-  gap:8vh;
+  gap:6vh;
 }
 
 .medicine-form-open {
@@ -16,4 +16,19 @@
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.order-btns{
+  display: flex;
+  margin-top: 4vh;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.suggested-meds-list{
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  max-height: 20vh;
+  overflow-y: auto;
 }

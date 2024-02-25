@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import { getAllMedicines } from "../../apis/Interceptor";
-
 import Chip from "@mui/material/Chip";
 import "./MedicineForm.css";
 
-export default function MedicineForm({
-  isOpen,
-  onClose,
-  selectedPrescription,
-}) {
+export default function MedicineForm({ isOpen, onClose, selectedPrescription }) {
   console.log(selectedPrescription);
   const [patientDetails, setPatientDetails] = useState({
     name: "",
@@ -129,74 +124,81 @@ export default function MedicineForm({
   };
 
   return (
-    <div className={`medicine-form-${isOpen ? "open" : ""}`}>
+    <div className={`medicine-form ${isOpen ? "open" : ""}`}>
       <div className="form-content">
         {12 && (
           <>
             <form onSubmit={handleSubmit} className="form-inputs">
               <div className="patient-info">
-                <label>
+                <label className="label">
                   Name:
                   <input
                     type="text"
                     name="name"
                     value={patientDetails.name}
                     onChange={handlePatientChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Age:
                   <input
                     type="text"
                     name="age"
                     value={patientDetails.age}
                     onChange={handlePatientChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Address:
                   <input
                     type="text"
                     name="address"
                     value={patientDetails.address}
                     onChange={handlePatientChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Contact:
                   <input
                     type="text"
                     name="contact"
                     value={patientDetails.contact}
                     onChange={handlePatientChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Date:
                   <input
                     type="text"
                     name="date"
                     value={patientDetails.date}
                     onChange={handlePatientChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Description:
                   <textarea
                     name="description"
                     value={patientDetails.description}
                     onChange={handlePatientChange}
+                    className="textarea-field"
                   />
                 </label>
               </div>
               <div className="medicine-info">
-                <label>
+                <label className="label">
                   Medicine Name:
                   <input
                     type="text"
                     name="name"
                     value={patientDetails.medicineDetails.name}
                     onChange={handleMedicineChange}
+                    className="input-field"
                   />
                   {patientDetails.suggestedMedicines.length > 0 && (
                     <div className="suggested-meds-container">
@@ -204,8 +206,9 @@ export default function MedicineForm({
                       <select
                         id="selectedMedicine"
                         name="selectedMedicine"
-                        value={patientDetails.medicineDetails.name} // Set the value to the selected medicine
+                        value={patientDetails.medicineDetails.name}
                         onChange={(e) => handleSelectedMedicineChange(e)}
+                        className="input-field"
                       >
                         <option value="">Select a medicine</option>
                         {patientDetails.suggestedMedicines.map((medicine) => (
@@ -216,53 +219,49 @@ export default function MedicineForm({
                       </select>
                     </div>
                   )}
-                  <button type="button" onClick={handleAddMedicine}>
+                  <button type="button" onClick={handleAddMedicine} className="button">
                     Add Medicine
                   </button>
                   {patientDetails.selectedMedicines.length > 0 && (
                     <div className="added-medicines">
-                      {/* Display the selected medicines as Chips */}
-                      {patientDetails.selectedMedicines.length > 0 && (
-                        <div className="added-medicines">
-                          {/* Display the selected medicines as Chips */}
-                          {patientDetails.selectedMedicines.map(
-                            (medicine, index) => (
-                              <Chip
-                                key={index}
-                                label={medicine.name}
-                                onDelete={() => handleDeleteMedicine(index)}
-                              />
-                            )
-                          )}
-                        </div>
-                      )}
+                      {patientDetails.selectedMedicines.map((medicine, index) => (
+                        <Chip
+                          key={index}
+                          label={medicine.name}
+                          onDelete={() => handleDeleteMedicine(index)}
+                          className="chip"
+                        />
+                      ))}
                     </div>
                   )}
                 </label>
-                <label>
+                <label className="label">
                   Dosage:
                   <input
                     type="text"
                     name="dosage"
                     value={patientDetails.medicineDetails.dosage}
                     onChange={handleMedicineChange}
+                    className="input-field"
                   />
                 </label>
-                <label>
+                <label className="label">
                   Frequency:
                   <input
                     type="text"
                     name="frequency"
                     value={patientDetails.medicineDetails.frequency}
                     onChange={handleMedicineChange}
+                    className="input-field"
                   />
                 </label>
               </div>
               <div className="order-btns">
-                <button type="submit" onClick={() => handleConfirmOrder()}>
+                <button type="submit" onClick={handleConfirmOrder} className="button">
                   Confirm Order
                 </button>
-                <button type="reject">Reject Order</button>
+                <div style={{ marginTop: '10px' }}></div>
+                <button type="reject" className="button" style={{ backgroundColor: '#dc3545' }}>Reject Order</button>
               </div>
             </form>
           </>
